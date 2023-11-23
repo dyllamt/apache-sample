@@ -1,0 +1,4 @@
+airflow
+delta
+kafka-python
+pyspark

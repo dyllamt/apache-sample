@@ -5,13 +5,13 @@ Helm charts and source code for an apache data application.
 
 ![](system-design.png)
 
-`Kafka`: event source to ingest realtime application data
+`Kafka` event source to ingest realtime application data
 
-`Spark`: framework for microbatch and batch processes
+`Spark` framework for microbatch and batch processes
 
-`Airflow`: orchestration of microbatch and batch processes
+`Airflow` orchestration of microbatch and batch processes
 
-`Delta`: ACID-compliant storage layer on file storage
+`Delta` ACID-compliant storage layer on file storage
 
 `Trino` analytics query engine for ad-hoc analysis
 
@@ -25,3 +25,11 @@ An end-to-end test of the system can be run from minikube. The application:
 4. triggers a sql query through trino to simulate an end-user
 
 The tests can be triggered from the tests module with pytest.
+
+
+## Dev Dependencies
+
+```
+brew install helm
+
+```
