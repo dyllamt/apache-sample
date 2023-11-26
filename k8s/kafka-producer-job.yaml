@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kafka-producer-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: kafka-producer
+        image: "kafka-producer:latest"  # This specifies your Docker image
+        imagePullPolicy: Never
+        envFrom:
+        - configMapRef:
+            name: env-config  # This refers to your ConfigMap for environment variables
+      restartPolicy: Never  # The job will not restart automatically if it fails
+  ttlSecondsAfterFinished: 30
+  backoffLimit: 3  # The job will retry up to 3 times if it fails

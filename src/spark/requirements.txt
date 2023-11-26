@@ -1,2 +1,2 @@
-delta-spark
-pyspark
+delta-spark==2.4
+pyspark==3.4

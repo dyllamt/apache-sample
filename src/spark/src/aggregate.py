@@ -21,13 +21,6 @@ def main(source_path: str, destination_path: str):
         .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
         .getOrCreate()
     )
-    aggregate_table = (  # noqa
-        DeltaTable.createIfNotExists(spark)
-        .tableName(table_name)
-        .addColummns(aggregate_schema)
-        .location(destination_path)
-        .execute()
-    )
     aggregate_job = (  # noqa
         spark.read  # reads from delta
         .format("delta")

@@ -1,5 +1,5 @@
 # apache-sample
-Helm charts and source code for an apache data application.
+An apache data application on kubernetes.
 
 ## System Design
 
@@ -27,9 +27,42 @@ An end-to-end test of the system can be run from minikube. The application:
 The tests can be triggered from the tests module with pytest.
 
 
-## Dev Dependencies
+## Developer Notes
+
+Ensure docker desktop is running
+```shell
+open -a Docker
+```
+
+Build docker images for the kafka producer and spark jobs
+```shell
+make kafka-producer-image
+make spark-jobs-image
+```
+
+Activate the local kubernetes context and install required operators
+```shell
+kubectl config use-context docker-desktop
 
 ```
-brew install helm
 
+Deploy the kafka broker and delta storage to the cluster
+```shell
+make kafka-broker-chart
+make delta-storage-chart
+```
+
+Deploy the spark streaming job to the cluster
+```shell
+make spark-ingest-job
+```
+
+Deploy the kafka producer job to the cluster
+```shell
+make kafka-producer-job
+```
+
+Deploy the spark batch job to the cluster
+```shell
+make spark-aggregate-job
 ```

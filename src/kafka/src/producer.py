@@ -27,19 +27,21 @@ def close_producer(producer: KafkaProducer) -> None:
 
 def sample_data():
     return {
-        "uid": uuid.uuid4(),
-        "timestamp": datetime.now(),
+        "uid": str(uuid.uuid4()),
+        "timestamp": str(datetime.datetime.now()),
         "value": random.random(),
     }
 
 
 if __name__ == "__main__":
+    import os
 
-    ADDRESS = "kafka-cluster.kafka.svc.cluster.local:9092"
-    TOPIC = "sample"
+    ADDRESS = os.environ.get("KAFKA_BOOTSTRAP_SERVERS", "")
+    TOPIC = os.environ.get("KAFKA_TOPIC", "")
 
     producer = create_producer(ADDRESS)
-    for i in range(1000000):
+    for i in range(1000):
+        print(i)
         publish_message(
             producer=producer,
             topic=TOPIC,

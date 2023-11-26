@@ -1,14 +1,13 @@
 import pyspark
-from delta import DeltaTable
-from pyspark.sql import types
+from pyspark.sql import types, functions
 
 
 table_name = "ingest"
 ingest_schema = types.StructType(
     [
         types.StructField("uid", dataType=types.StringType(), nullable=False),
-        types.StructField("timestamp", dataType=types.TimestampType(), nullable=False),
-        types.StructField("value", dataType=types.LongType(), nullable=False),
+        types.StructField("timestamp", dataType=types.StringType(), nullable=False),
+        types.StructField("value", dataType=types.FloatType(), nullable=False),
     ]
 )
 
@@ -21,13 +20,6 @@ def main(kafka_server: str, delta_path: str, kafka_topic: str = "sample"):
         .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
         .getOrCreate()
     )
-    ingest_table = (  # noqa
-        DeltaTable.createIfNotExists(spark)
-        .tableName(table_name)
-        .addColummns(ingest_schema)
-        .location(delta_path)
-        .execute()
-    )
     ingest_stream = (
         spark.readStream  # reads from kafka
         .format("kafka")
@@ -35,7 +27,11 @@ def main(kafka_server: str, delta_path: str, kafka_topic: str = "sample"):
         .option("subscribe", kafka_topic)
         .option("startingOffsets", "earliest")
         .load()
+        .selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+        .select(functions.from_json("value", ingest_schema).alias("data"))
+        .select("data.*")
         .writeStream  # writes to delta
+        .option("checkpointLocation", "file:///tmp/checkpoints/ingest")
         .trigger(processingTime="10 seconds")
         .format("delta")
         .outputMode("append")
@@ -45,6 +41,10 @@ def main(kafka_server: str, delta_path: str, kafka_topic: str = "sample"):
 
 
 if __name__ == "__main__":
-    KAFKA_SERVER = "kafka://thing"
-    DELTA_PATH = "/mnt/data/spark/delta/ingest"
-    main(kafka_server=KAFKA_SERVER, delta_path=DELTA_PATH)
+    import os
+
+    KAFKA_SERVER = os.environ.get("KAFKA_BOOTSTRAP_SERVERS", "")
+    KAFKA_TOPIC = os.environ.get("KAFKA_TOPIC", "")
+    DELTA_PATH = os.environ.get("DELTA_INGEST_LOCATION", "")
+
+    main(kafka_server=KAFKA_SERVER, delta_path=DELTA_PATH, kafka_topic=KAFKA_TOPIC)

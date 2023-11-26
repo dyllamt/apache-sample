@@ -7,7 +7,7 @@ spec:
     storage: {{ .Values.storage }}
   accessModes:
     - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Delete
   storageClassName: manual
   hostPath:
-    path: /mnt/data/spark
+    path: /tmp/delta

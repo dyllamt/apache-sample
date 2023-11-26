@@ -1,6 +1,7 @@
-FROM gcr.io/spark-operator/spark-py:v2.4.5
+FROM apache/spark-py:v3.4.0
 
 COPY requirements.txt ./
-RUN pip install -r ./requirements.txt
+USER root
+RUN pip3 install -r ./requirements.txt
 
-COPY ./jobs/ /opt/spark/jobs/
+COPY ./src /opt/spark/jobs/

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-config
+data:
+  DELTA_INGEST_LOCATION: "file:///tmp/delta/ingest"
+  DELTA_AGGREGATE_LOCATION: "file:///tmp/delta/aggregate"
+  KAFKA_BOOTSTRAP_SERVERS: "kafka-cluster-kafka-bootstrap.dev.svc.cluster.local:9092"
+  KAFKA_TOPIC: "sample"
