@@ -20,6 +20,13 @@ def main(kafka_server: str, delta_path: str, kafka_topic: str = "sample"):
         .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
         .getOrCreate()
     )
+    create_job = (  # noqa
+        spark.createDataFrame([], ingest_schema)
+        .write
+        .format("delta")
+        .mode("ignore")
+        .save(delta_path)
+    )
     ingest_stream = (
         spark.readStream  # reads from kafka
         .format("kafka")

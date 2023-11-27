@@ -1,6 +1,8 @@
 #!/bin/bash
 
+# namespace and configuration map for env variables
 kubectl create namespace dev
+kubectl apply -f ../k8s/config-map.yaml -n dev
 
 # strimzi operator
 helm repo add strimzi http://strimzi.io/charts/
