@@ -1,5 +1,5 @@
 # apache-sample
-A sample apache data system deployed on kubernetes. Written for development on a local cluster and incramental modification for production environments.
+An apache data system written for development on a local cluster and incramental modifications for production environments.
 
 ## System Design
 
