@@ -1,5 +1,5 @@
 # apache-sample
-Apache data system written for easy development in a local cluster and incramental deployment modifications for production environments. Great for learning about developing in the apache and k8s ecosystems.
+Apache data system written for easy development in a local cluster and incramental deployment modifications for production environments. Great for learning about cloud-native development in the apache software ecosystem.
 
 ## System Design
 
@@ -7,20 +7,19 @@ Apache data system written for easy development in a local cluster and incrament
 
 - `Kafka` event source to ingest realtime application data
 - `Spark` framework for microbatch and batch processes
-- `Airflow` orchestration of microbatch and batch processes
 - `Delta` ACID-compliant storage layer on file storage
 - `Trino` analytics query engine for ad-hoc analysis
 
 ## System Tests
 
-An end-to-end test of the system can be run from docker-desktop. The test:
+An end-to-end test of the system can be run in kubernetes. The test:
 
 1. publishes sample data to a topic on the kafka cluster
 2. ingests the data into a staging table on delta using structured-streaming
 3. performs windowed aggregations on the data and saves the results
 4. triggers a sql analytics query through trino to simulate an analyst
 
-The tests can be triggered from the tests module.
+The tests are triggered through github actions.
 
 
 ## Developer Notes
@@ -49,4 +48,6 @@ Run the system tests
 1. Scale the kafka cluster and spark streaming jobs
 2. Change the batch job deployment to run on an ephemeral cluster
 3. Change the storage configuration to cloud storage
-4. Scale the trino cluster for more performant queries
+4. Update the hive metastore to postgresql
+5. Scale the trino cluster for more performant queries
+6. Setup an orchestrator such as Airflow or Prefect

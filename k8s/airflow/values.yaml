@@ -1,8 +1,0 @@
-images:
-  airflow:
-    pullPolicy: Always
-    repository: my-image
-    tag: latest
-webserver:
-  service:
-    type: LoadBalancer

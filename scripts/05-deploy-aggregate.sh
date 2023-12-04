@@ -1,1 +1,0 @@
-kubectl apply -f ../k8s/spark/spark-application-aggregate.yaml -n dev
