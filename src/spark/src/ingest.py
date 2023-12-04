@@ -6,7 +6,7 @@ table_name = "ingest"
 ingest_schema = types.StructType(
     [
         types.StructField("uid", dataType=types.StringType(), nullable=False),
-        types.StructField("timestamp", dataType=types.StringType(), nullable=False),
+        types.StructField("timestamp", dataType=types.TimestampType(), nullable=False),
         types.StructField("value", dataType=types.FloatType(), nullable=False),
     ]
 )

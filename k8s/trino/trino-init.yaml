@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: trino-init-job
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      containers:
+      - name: trino-query-executor
+        image: appropriate/curl  # or any other suitable image
+        command: ["/bin/sh"]
+        args: 
+          - "-c"
+          - >
+            set -e;
+            until $(curl --output /dev/null --silent --head --fail http://trino:8080); do
+                echo 'Waiting for Trino to be ready...';
+                sleep 5;
+            done;
+            echo 'Trino is up, running the init script...';
+            # Trino query to create the 'ingest' table
+            curl -X POST --header "Content-Type: application/sql" \
+                 -d "CREATE TABLE IF NOT EXISTS ingest (uid VARCHAR, timestamp TIMESTAMP, value DOUBLE) WITH (external_location = 'file:///tmp/delta/ingest', format = 'DELTA')" \
+                 http://trino:8080/v1/statement;
+            # Trino query to create the 'aggregate' table
+            curl -X POST --header "Content-Type: application/sql" \
+                 -d "CREATE TABLE IF NOT EXISTS aggregate (timestamp TIMESTAMP, count BIGINT, average DOUBLE) WITH (external_location = 'file:///tmp/delta/aggregate', format = 'DELTA')" \
+                 http://trino:8080/v1/statement;
+      restartPolicy: Never
+  backoffLimit: 4
