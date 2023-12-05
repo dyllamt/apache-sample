@@ -20,6 +20,7 @@ while : ; do
         exit 1
     fi
     if [[ $elapsed -ge $TIMEOUT ]]; then
+        kubectl get sparkapplication $APP_NAME -n $NAMESPACE
         echo "Timed out waiting for the application to start."
         exit 1
     fi
@@ -51,6 +52,7 @@ while : ; do
         exit 1
     fi
     if [[ $elapsed -ge $TIMEOUT ]]; then
+        kubectl get sparkapplication $APP_NAME -n $NAMESPACE
         echo "Timed out waiting for the application to finish."
         exit 1
     fi
