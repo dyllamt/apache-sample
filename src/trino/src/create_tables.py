@@ -1,43 +1,37 @@
-from trino.dbapi import connect
+from trino.dbapi import connect  # type: ignore
 
 
-def create_trino_tables():
+def register_trino_tables():
     # Trino connection details
     conn = connect(
         host="trino-service",
         port=8080,
         user="init-job",
-        catalog="hive",
+        catalog="delta",  # Make sure this matches your Delta Lake catalog
         schema="default",
     )
     cur = conn.cursor()
 
-    # SQL to create 'ingest' table
+    # Register 'ingest' table
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS hive.default.ingest (
-            uid VARCHAR,
-            timestamp TIMESTAMP,
-            value DOUBLE
-        ) WITH (
-            external_location = 'file:///tmp/delta/ingest',
-            format = 'DELTA'
+        CALL delta.system.register_table(
+            schema_name => 'default',
+            table_name => 'ingest',
+            table_location => 'file:///tmp/delta/ingest'
         )
     """)
 
-    # SQL to create 'aggregate' table
+    # Register 'aggregate' table
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS hive.default.aggregate (
-            timestamp TIMESTAMP,
-            count BIGINT,
-            average DOUBLE
-        ) WITH (
-            external_location = 'file:///tmp/delta/aggregate',
-            format = 'DELTA'
+        CALL delta.system.register_table(
+            schema_name => 'default',
+            table_name => 'aggregate',
+            table_location => 'file:///tmp/delta/aggregate'
         )
     """)
 
-    print("Tables created in Trino")
+    print("Tables registered in Trino")
 
 
 if __name__ == "__main__":
-    create_trino_tables()
+    register_trino_tables()

@@ -8,7 +8,7 @@ aggregate_schema = types.StructType(
     [
         types.StructField("timestamp", dataType=types.TimestampType(), nullable=False),
         types.StructField("count", dataType=types.LongType(), nullable=False),
-        types.StructField("average", dataType=types.FloatType(), nullable=False),
+        types.StructField("average", dataType=types.DoubleType(), nullable=False),
     ]
 )
 window_duration = "1 second"
@@ -33,7 +33,6 @@ def main(source_path: str, destination_path: str):
         spark.read  # reads from delta
         .format("delta")
         .load(source_path)
-        .withColumn("timestamp", functions.to_timestamp("timestamp"))
         .groupBy(functions.window("timestamp", window_duration))
         .agg(
             functions.count("value").alias("count"),

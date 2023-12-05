@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: trino-query-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: trino-tables-query
+        image: trino-queries:latest  # Replace with your image name
+        imagePullPolicy: Never
+        command: ["python", "/opt/trino/test_queries.py"]
+      restartPolicy: Never
+  ttlSecondsAfterFinished: 30
+  backoffLimit: 3  # The job will retry up to 3 times if it fails

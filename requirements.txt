@@ -1,4 +1,4 @@
-airflow
-delta
+delta-spark==2.4
 kafka-python
-pyspark
+pyspark==3.4
+trino

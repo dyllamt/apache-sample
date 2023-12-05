@@ -1,5 +1,5 @@
 # apache-sample
-Apache data system written for easy development in a local cluster and incramental deployment modifications for production environments. Great for learning about cloud-native development in the apache software ecosystem.
+Apache data system written for development in a local cluster and incramental deployment modifications for production environments. Great for learning about cloud-native development in the apache software ecosystem.
 
 ## System Design
 
@@ -27,19 +27,25 @@ The tests are triggered through github actions.
 ### Testing in the Development Environment
 Ensure docker desktop is running
 ```shell
-open -a Docker
+open -a Docker;
 kubectl config use-context docker-desktop
 ```
 
-Build docker images for the kafka producer and spark jobs
+Build docker images for the kafka, spark, and trino jobs
 ```shell
-make kafka-producer-image
-make spark-jobs-image
+make kafka-producer-image;
+make spark-jobs-image;
+make trino-queries-image
 ```
 
-Run the system tests
+Run the system test
 ```shell
-
+cd scripts;
+./01-install-operators.sh;
+./02-deploy-kafka.sh;
+./03-deploy-delta-trino.sh;
+./04-run-spark-jobs.sh;
+./05-run-trino-query.sh
 ```
 
 
@@ -51,3 +57,9 @@ Run the system tests
 4. Update the hive metastore to postgresql
 5. Scale the trino cluster for more performant queries
 6. Setup an orchestrator such as Airflow or Prefect
+7. Configure security and monitoring for the application
+
+
+## Updates
+
+Checkout this open-source project and company: [stackable](https://stackable.tech/en/).

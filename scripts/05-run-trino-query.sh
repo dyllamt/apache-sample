@@ -1,0 +1,1 @@
+kubectl apply -f ../k8s/trino/trino-query.yaml -n dev

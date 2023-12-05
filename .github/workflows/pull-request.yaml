@@ -1,0 +1,51 @@
+name: "pull-request"
+
+on:
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Container Build - Kafka
+        run: |
+          make kafka-producer-image
+
+      - name: Container Build - Spark
+        run: |
+          make spark-jobs-image
+
+      - name: Container Build - Trino
+        run: |
+          make trino-queries-image
+
+      - name: K8s Test - Cluster Creation
+        uses: helm/kind-action@v1.4.0
+        with:
+          cluster_name: github-cluster
+
+      - name: K8s Tests - Install Operators
+        run: |
+          cd scripts
+          ./01-install-operators.sh
+      
+      - name: K8s Tests - Deploy Infrastructure
+        run: |
+          cd scripts
+          ./02-deploy-kafka.sh
+          ./03-deploy-delta-trino.sh
+
+      - name: K8s Tests - Run Jobs
+        run: |
+          cd scripts
+          ./04-run-spark-jobs.sh
+          ./05-run-trino-query.sh
