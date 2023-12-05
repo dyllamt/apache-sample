@@ -46,6 +46,9 @@ jobs:
 
       - name: K8s Tests - Run Jobs
         run: |
+          kind load docker-image kafka-producer --name github-cluster
+          kind load docker-image spark-jobs --name github-cluster
+          kind load docker-image trino-queries --name github-cluster
           cd scripts
           ./04-run-spark-jobs.sh
           ./05-run-trino-query.sh
