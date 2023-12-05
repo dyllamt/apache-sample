@@ -8,6 +8,7 @@ Apache data system written for development in a local cluster and incramental de
 - `Kafka` event source to ingest realtime application data
 - `Spark` framework for microbatch and batch processes
 - `Delta` ACID-compliant storage layer on file storage
+- `Hive` metadata store for the delta schemas
 - `Trino` analytics query engine for ad-hoc analysis
 
 ## System Tests
@@ -19,7 +20,7 @@ An end-to-end test of the system can be run in kubernetes. The test:
 3. performs windowed aggregations on the data and saves the results
 4. triggers a sql analytics query through trino to simulate an analyst
 
-The tests are triggered through github actions.
+The tests are triggered through github actions, although you will need to use a self-hosted runner.
 
 
 ## Developer Notes
