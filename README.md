@@ -8,6 +8,7 @@ Apache data system written for development in a local cluster and incramental de
 - `Kafka` event source to ingest realtime application data
 - `Spark` framework for microbatch and batch processes
 - `Delta` ACID-compliant storage layer on file storage
+- `Hive` metadata store for the delta schemas
 - `Trino` analytics query engine for ad-hoc analysis
 
 ## System Tests
