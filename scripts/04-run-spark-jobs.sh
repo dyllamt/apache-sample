@@ -21,6 +21,7 @@ while : ; do
     fi
     if [[ $elapsed -ge $TIMEOUT ]]; then
         kubectl describe sparkapplication $APP_NAME -n $NAMESPACE
+        kubectl logs pyspark-ingest-driver -n dev
         echo "Timed out waiting for the application to start."
         exit 1
     fi
