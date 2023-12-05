@@ -5,7 +5,7 @@ kubectl apply -f ../k8s/spark/job-env-variables.yaml -n dev
 kubectl apply -f ../k8s/spark/spark-application-ingest.yaml -n dev
 NAMESPACE="dev"
 APP_NAME="pyspark-ingest"
-TIMEOUT=300  # Timeout in seconds
+TIMEOUT=900  # Timeout in seconds
 INTERVAL=10  # Check interval in seconds
 elapsed=0
 echo "Waiting for SparkApplication '$APP_NAME' to start running..."
@@ -37,7 +37,7 @@ sleep 30
 kubectl apply -f ../k8s/spark/spark-application-aggregate.yaml -n dev
 NAMESPACE="dev"
 APP_NAME="pyspark-aggregate"
-TIMEOUT=300  # Timeout in seconds
+TIMEOUT=900  # Timeout in seconds
 INTERVAL=10  # Check interval in seconds
 elapsed=0
 echo "Waiting for SparkApplication '$APP_NAME' to start finish..."
